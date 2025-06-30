@@ -3,13 +3,44 @@
   <head>
     <meta charset="UTF-8" />
     <title>MeiBot Widget</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        background: #ffffff;
+      }
+    </style>
   </head>
   <body>
     <div id="meibot-chat-widget"></div>
 
+    <!-- Load the MeiBot chat widget script -->
     <script
       src="https://bot.messagesimproved.com/chat-widget.js?bot=b4f0abc3-e29b-4711-bcbc-e87513a3c50b"
       async
     ></script>
+
+    <!-- Listener for onboarding user data sent from Magic Patterns -->
+    <script>
+      window.addEventListener("message", (event) => {
+        if (event.data?.type === "USER_DATA") {
+          const user = event.data.payload;
+
+          // Log or store the data (customize this logic as needed)
+          console.log("Received user info from Magic Patterns:", user);
+
+          // Optional: make it globally accessible to your chatbot logic
+          window.MeiBotUserData = user;
+
+          // Example: add a message into the DOM (non-functional but visible)
+          const header = document.createElement("div");
+          header.style.padding = "10px";
+          header.style.background = "#f0f0f0";
+          header.innerHTML = `<strong>Welcome ${user.name || "there"}!</strong>`;
+          document.body.insertBefore(header, document.getElementById("meibot-chat-widget"));
+        }
+      });
+    </script>
   </body>
 </html>
